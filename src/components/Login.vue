@@ -1,16 +1,19 @@
 <template>
 
-    <div class="logo-container">
+    <div>
+        <div class="logo-container">
         <img class="logo" src="../assets/LakbayLogo.png" alt="Lakbay Logo">
     </div>
 
     <div class = login-container>
-        <h1 class = "login-header">Welcome to Lakbay</h1>
-        <h1 class = "login-styles">Email</h1>
-        <input class = "login-input"  v-model = "LoginInfo.useremail" type = "email" placeholder = "Enter Email"/>
-        <h1 class = "login-styles">Password</h1>
-        <input class = "login-input"  v-model = "LoginInfo.userpassword" type = "password" placeholder = "Enter Password"/>
+        <h1 class = "login-header">Welcome back to Lakbay</h1>
+        <div class = login-styles-container>
+            <h1 class = "login-styles">Email</h1>
+            <input class = "login-input"  v-model = "LoginInfo.useremail" type = "email" placeholder = "Enter Email"/>
+            <h1 class = "login-styles">Password</h1>
+            <input class = "login-input"  v-model = "LoginInfo.userpassword" type = "password" placeholder = "Enter Password"/>
 
+        </div>
     </div>
 
     <div class = "bottom-header">
@@ -21,12 +24,14 @@
         </p>
         
     </div>
+    </div>
 
 </template>
 
 <script>
 import axios from 'axios'
 import jwt_decode from 'jwt-decode'
+import Cookies from 'js-cookie'
 
 export default {
     name: 'Login',
@@ -38,6 +43,7 @@ export default {
             },
             Warning: " ",
             userToken: " ",
+
         };
     },
 
@@ -46,16 +52,19 @@ export default {
             
             if(this.LoginInfo.useremail && this.LoginInfo.userpassword){
                 this.Warning = "",
-                axios.post(`http://192.168.1.22:7000/loginpage/u/login`, this.LoginInfo)
+                //ip address of the http requests may need to be changes if tested from other device
+                axios.post(`https://192.168.1.12:8000/loginpage/u/login`, this.LoginInfo)
                 .then((response) => {
-                    this.Warning = response.data.message;
+                    this.Warning = "Login Successful";
                     const userToken = response.data.token;
+                    console.log(response.data.token)
 
                     const decoded = jwt_decode(userToken);
                     console.log(decoded.data.user_id) // the user id of the user who logins
+
                     console.log(response.status)
                     if(response.status==200){
-                        localStorage.setItem("usertoken", JSON.stringify(response.data.token))
+                        Cookies.set('auth_token', userToken);
                         console.log("routing")
                         this.$router.push({name: 'Home'})
                     }
@@ -75,45 +84,53 @@ export default {
                 this.Warning = "Check your inputs",
                 console.log("no input")
             }
-    },
+        },
+        
     }
 
 }
 </script>
 
 <style>
-    @media (max-width: 902px) {
+
+    @media (max-width: 500px) {
         
         .logo-container {
             max-width: 100%;
             text-align: center;
-
         }
-
         .logo {
             width: 50%;
             margin-bottom: 30px;
         }
         .login-container {
-            border: 1px dashed gray;
+            /* border: 1px dashed gray; */
             display: flex;
             flex-direction: column;
             text-align: center;
         }
         .login-header{
-            border: 1px dashed gray;
+            /* border: 1px dashed gray; */
             font-family: 'Inter';
             font-style: normal;
-            font-weight: 600;
-            font-size: 25px;
+            font-weight: 500px;
+            font-size: 6.7vw;
             margin-bottom: 70px;
             line-height: 1.5;
             color: #000000;
         }
-        .login-styles{
+        .login-styles-container{
+            margin-top: 60px;
             margin-left: 12%;
             margin-right: 12%;
-            border: 1px dashed gray;
+            /* border: 1px dashed gray; */
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+        }
+        .login-styles{
+
+            /* border: 1px dashed gray; */
             text-align: left;
             font-family: 'Inter';
             font-style: normal;
@@ -124,13 +141,11 @@ export default {
         }
         .login-input{
             
-            width: 68%;
+            width: 90%;
             height: 40px;
             padding-left: 20px;
             display: block;
             margin-bottom: 20px;
-            margin-right: auto;
-            margin-left: auto;
             color: #ffffff;
             background-color: #3C3C3C;
         }
@@ -145,7 +160,10 @@ export default {
         }
         .loginbutton{
             border: none;
-            margin: 50px;
+            margin-top: 30px;
+            margin-left: 50px;
+            margin-right: 50px;
+            margin-bottom: 20px;
             align-self: center;
             width: 25%;
             height: 40px;
