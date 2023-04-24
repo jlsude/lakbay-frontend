@@ -1,14 +1,14 @@
 <template>
-	<div class="bg-gray-50 px-8">
+	<div class="qr-container">
 		<p>{{ error }}</p>
-		<p>{{ decodedString }}</p>
+		<p style = "color: white">{{ decodedString }}</p>
 		<qrcode-stream @init="onInit" @decode="onDecode" class="QRcode" :stream="stream"></qrcode-stream>
-
+		<button class = "backbutton" v-on:click = "backToHome">Back</button>
 	</div>
 </template>
 
 <script>
-
+import Cookies from 'js-cookie'
 import { QrcodeStream } from 'vue3-qrcode-reader'
 
 export default {
@@ -17,12 +17,22 @@ export default {
 			error: '',
 			decodedString: '',
 			stream: null,
+			userToken: '',
 		}
 	},
 	components:{
 		QrcodeStream
 	},
+	mounted() {
+		let userToken = Cookies.get('auth_token')
+		if (userToken) {
+			console.log('user has token')
+		} else{
+			console.log('user has no token')
+		}
+	},
 	methods: {
+		
 		async onInit(promise) {
 			
 		    try {
@@ -59,12 +69,18 @@ export default {
 		},
 		onDecode(decodedString){
 			this.decodedString = decodedString;
-			console.log('hellooooo')
+			console.log('hellooooo', decodedString )
+
 			// window.location.reload()
 			// alert('Decoded string: ' + decodedString);
-			this.decodedString = ''
+			// this.decodedString = ''
 
-		}
+		},
+		backToHome(){
+			console.log('Routing to QR Home')
+			this.$router.push({name: 'Home'});
+		},
+
 	}
 }
 </script>
@@ -72,5 +88,37 @@ export default {
 <style>
 	.QRcode{
 		margin-top: 0px;
+		width: 10px;
 	}
-</style>
+	.qr-container{
+		margin-top: 27vh;
+		background: #3C3C3C;
+		padding: 10px;
+		width: auto;
+
+		
+	}
+	.backbutton{
+		border: none;
+		margin: 50px;
+		align-self: center;
+		width: 25%;
+		height: 40px;
+		border-radius: 10px;
+		background-color: #c4c4c4;
+
+		text-align: center;
+		font-family: 'Inter';
+		font-style: normal;
+		font-weight: 400;
+		font-size: 15px;
+		line-height: 1.5;
+		color: #000000;
+	}
+    .backbutton:active {
+		background-color: #3C3C3C;
+	}
+
+
+
+	</style>

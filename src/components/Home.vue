@@ -29,7 +29,7 @@ import axios from 'axios'
 		mounted(){
 			let userToken = Cookies.get('auth_token');
 			if (userToken) {
-				axios.get(`https://192.168.1.12:8000/home/u/userprofile`, {
+				axios.get(`http://192.168.1.12:7000/home/u/userprofile`, {
 				headers: {
 					Authorization: `Bearer ${userToken}`
 				}
@@ -49,6 +49,10 @@ import axios from 'axios'
 				}
 				});
 			} else {
+				
+				console.log('clearing cookie')
+                Cookies.remove('auth_token'); 
+                this.authToken = ''
 				this.$router.push({name: 'Login'});
 			}
 		},
@@ -61,8 +65,8 @@ import axios from 'axios'
 			},
 			QRscanner(){
 				
-					console.log('Routing to QR Scanner')
-					this.$router.push({name: 'QrScanner'});
+				console.log('Routing to QR Scanner')
+				this.$router.push({name: 'QrScanner'});
 				
 				
 				
@@ -93,7 +97,7 @@ import axios from 'axios'
             line-height: 1.5;
             color: #000000;
         }
-        .logoutbutton:active {
+    .logoutbutton:active {
             background-color: #3C3C3C;
         }
 </style>

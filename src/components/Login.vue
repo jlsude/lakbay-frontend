@@ -43,17 +43,23 @@ export default {
             },
             Warning: " ",
             userToken: " ",
+            authToken: '',
 
         };
     },
+    mounted(){
+        console.log('clearing cookie')
+        Cookies.remove('auth_token'); 
+        this.authToken = ''
 
+    },
     methods: {
         login(){
             
             if(this.LoginInfo.useremail && this.LoginInfo.userpassword){
                 this.Warning = "",
                 //ip address of the http requests may need to be changes if tested from other device
-                axios.post(`https://192.168.1.12:8000/loginpage/u/login`, this.LoginInfo)
+                axios.post(`http://192.168.1.12:7000/loginpage/u/login`, this.LoginInfo)
                 .then((response) => {
                     this.Warning = "Login Successful";
                     const userToken = response.data.token;

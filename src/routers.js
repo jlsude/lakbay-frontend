@@ -2,7 +2,7 @@ import Home from './components/Home.vue';
 import SignUp from './components/SignUp.vue';
 import Login from './components/Login.vue';
 import QrScanner from './components/QrScanner.vue'
-
+import LandingPage from './components/landingpage.vue'
 import { createRouter, createWebHistory } from 'vue-router';
 
 
@@ -10,7 +10,7 @@ const routes = [
     {
         name: 'Home',
         component: Home,
-        path: '/',
+        path: '/home',
     },
     {
         name: 'SignUp',
@@ -20,12 +20,17 @@ const routes = [
     {
         name: 'Login',
         component: Login,
-        path: '/Login'
+        path: '/' //temporarily, supposed to be the landing page
     },
     {
         name: 'QrScanner',
         component: QrScanner,
-        path: '/Login'
+        path: '/qrscan'
+    },
+    {
+        name: 'LandingPage',
+        component: LandingPage,
+        path: '/landing'
     }
 
 
