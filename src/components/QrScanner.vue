@@ -85,19 +85,26 @@ export default {
 }
 </script>
 
-<style>
-	.QRcode{
-		margin-top: 0px;
-		width: 10px;
-	}
+<style scoped>
 	.qr-container{
 		margin-top: 27vh;
 		background: #3C3C3C;
 		padding: 10px;
 		width: auto;
+		align-items: center;
+		text-align: center;
+
+		
 
 		
 	}
+	.QRcode{
+		margin-top: 0px;
+		width: 40vh;
+		
+		
+	}
+	
 	.backbutton{
 		border: none;
 		margin: 50px;

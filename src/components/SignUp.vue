@@ -40,13 +40,13 @@
         
 
     </div>
-    <div class = "bottom-header">
+    <footer class = "bottom-header">
         <h1 class = "warning">{{ Warning }}</h1>
         <button v-on:click = "signUp" class = "signupbutton">Sign Up</button>
         <p class = "back-to-login">
-         <router-link class = "router-link" to = '/login'>Back to the Login page</router-link>
+         <router-link class = "router-link" to = '/'>Back to the Login page</router-link>
         </p>
-    </div>
+    </footer>
     </div>
 
 </template>
@@ -113,10 +113,11 @@ import axios from 'axios'
     }
 </script>
 
-<style>
+<style scoped>
     @media (max-width: 902px) {
 
         .logo-container {
+            margin-top: -5vh;
             max-width: 100%;
             text-align: center;
 
@@ -196,6 +197,9 @@ import axios from 'axios'
             font-size: 15px;
             line-height: 0.5;
             color: #000000;
+        }
+        .bottom-header{
+            text-align: center;
         }
         .warning{
             text-align: center;

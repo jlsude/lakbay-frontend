@@ -1,11 +1,23 @@
 <template>
-	<div>
-		<h1>Hello, Welcome to Lakbay</h1>
-		<button class = "logoutbutton" v-on:click = "QRscanner">QR Scanner</button>
-		<h1>Hello, {{ this.userProfile.user_email }}</h1>
-		<h1>Hello, {{ userProfile.user_firstname }}</h1>
-		<h1>he, {{ this.userProfile.user_lastname }}</h1>
-		<button class = "logoutbutton" v-on:click = "logout">Logout</button>
+	<div style = "display: flex; flex-direction: column;">
+		<header class = "home-header">
+			<div class="logo-container">
+				<img class="logo" src="../assets/LakbayLogo.png" alt="Lakbay Logo">
+				<img class = "menu" src = "../assets/hamburgerMenu.png" alt = "Menu burger">
+			</div>
+			
+		</header>
+		<div class = "qrdiv">
+			<button class = "qrbutton" v-on:click = "QRscanner">QR-Scanner</button>
+			<button class = "beginLakbay" v-on:click = "beginLakbay" >Begin your Lakbay</button>
+			<h1 class = "recentLakbay">Your Recent Lakbay</h1>
+			<button class = "LakbayRecent" >{{ LakbayRecent}}</button>
+			<button class = "LakbayRecent" >{{ LakbayRecent}}</button>
+			
+		</div>
+		<footer class = "home-footer">
+			<button class = "logoutbutton" v-on:click = "logout">Logout</button>
+		</footer>
 	</div>
 </template>
 
@@ -24,6 +36,8 @@ import axios from 'axios'
 				user_lastname: "",
 			},
 			userToken: "",
+			LakbayRecent: "Casa Manila",
+
 			}
 		},
 		mounted(){
@@ -79,25 +93,117 @@ import axios from 'axios'
 
 </script>
 
-<style>
-	.logoutbutton{
-            border: none;
-            margin: 50px;
-            align-self: center;
-            width: 25%;
-            height: 40px;
-            border-radius: 10px;
-            background-color: #c4c4c4;
+<style scoped>
+	@media (max-width: 500px) {
+		#Home{
+			font-family: 'Inter';
+		}
+		.home-header {
+			/* border: 1px dashed rgb(148, 19, 19); */
+			margin-top: -5vh;
+			margin-left: 1.5vw;
+			margin-right: 1.5vw;
+			}
+		.logo{
+			display: inline-block;
+			text-align: left;
+			width: 40vw;
+			height: auto;
+		}
+		.menu{
+			margin-top: 1vh;
+			float: right;
+			width: 10vw;
+			height: auto;
+		}
+		.qrdiv{
+			display: flex;
+			flex-direction: column;
+			text-align: center;
+			
+		}
+		.qrbutton{
+			border: none;
+			padding: 18vh;
+			margin-top: 5vh;
+			align-self: center;
+			width: 25%;
+			height: 40px;
+			border-radius: 5vh;
+			background-color: #c4c4c4;
 
-            text-align: center;
-            font-family: 'Inter';
-            font-style: normal;
-            font-weight: 400;
-            font-size: 15px;
-            line-height: 1.5;
-            color: #000000;
-        }
-    .logoutbutton:active {
-            background-color: #3C3C3C;
-        }
+
+			font-family: 'Inter';
+			font-style: normal;
+			font-weight: 400;
+			font-size: 15px;
+			line-height: 1.5;
+			color: #000000;
+		}
+		.beginLakbay{
+			border: none;
+			margin-top: 4vh;
+			align-self: center;
+			width: 20vh;
+			height: 40px;
+			border-radius: 10px;
+			background-color: #c4c4c4;
+
+			text-align: center;
+			font-family: 'Inter';
+			font-style: normal;
+			font-weight: 400;
+			font-size: 15px;
+			line-height: 1.5;
+			color: #000000;
+		}
+		.recentLakbay{
+			border: 1px dashed gray;
+			font-size: 2.5vh; 
+			font-weight: 400;
+			text-align: left; 
+			margin-left: 5vw; 
+			margin-right: 5vw;
+			margin-top: 3vh;
+			margin-bottom: 0.2vh
+		}
+		.LakbayRecent{
+			border: none;
+			align-self: center;
+			width: 80vw;
+			height: 6vh;
+			border-radius: 1.4vh;
+			margin-top: 1vh;
+			background-color: #c4c4c4;
+
+			text-align: center;
+			font-family: 'Inter';
+			font-style: normal;
+			font-weight: 400;
+			font-size: 1.5em;
+			line-height: 1.5;
+			color: #000000
+		}
+		.logoutbutton{
+				border: none;
+				margin: 50px;
+				align-self: center;
+				width: 25%;
+				height: 40px;
+				border-radius: 10px;
+				background-color: #c4c4c4;
+
+				text-align: center;
+				font-family: 'Inter';
+				font-style: normal;
+				font-weight: 400;
+				font-size: 15px;
+				line-height: 1.5;
+				color: #000000;
+			}
+		.beginLakbay:active, .logoutbutton:active,
+		.LakbayRecent:active {
+				background-color: #3C3C3C;
+			}
+	}
 </style>

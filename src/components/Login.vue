@@ -1,7 +1,7 @@
 <template>
 
     <div>
-        <div class="logo-container">
+    <div class="logo-container">
         <img class="logo" src="../assets/LakbayLogo.png" alt="Lakbay Logo">
     </div>
 
@@ -16,14 +16,14 @@
         </div>
     </div>
 
-    <div class = "bottom-header">
+    <footer class = "bottom-header">
         <h1 class = "warning">{{ Warning }}</h1>
         <button v-on:click = "login" class = "loginbutton">Login</button>
         <p class = "New-to-Lakbay">
             New to Lakbay? <router-link  class = "router-link" to = '/sign-up'> Sign up</router-link>
         </p>
         
-    </div>
+    </footer>
     </div>
 
 </template>
@@ -97,10 +97,9 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+    
     @media (max-width: 500px) {
-        
         .logo-container {
             max-width: 100%;
             text-align: center;
@@ -155,6 +154,9 @@ export default {
             color: #ffffff;
             background-color: #3C3C3C;
         }
+        .bottom-header{
+            text-align: center;
+        }
         .warning{
             text-align: center;
             font-family: 'Inter';
@@ -175,8 +177,6 @@ export default {
             height: 40px;
             border-radius: 10px;
             background-color: #c4c4c4;
-
-            text-align: center;
             font-family: 'Inter';
             font-style: normal;
             font-weight: 400;
