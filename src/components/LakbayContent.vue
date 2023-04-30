@@ -77,7 +77,7 @@
 <script>
 import SidebarToHome from './SidebarToHome.vue';
 import axios from 'axios'
-
+import Cookies from 'js-cookie';
 
 export default {
 	name: 'LakbayContent',
