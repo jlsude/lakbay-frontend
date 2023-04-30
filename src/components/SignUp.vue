@@ -82,11 +82,9 @@ import axios from 'axios'
                 console.log('Signed up')
                 this.Warning = "";
                 //ip address of the http requests may need to be changes if tested from other device
-                axios.post('http://192.168.1.12:7000/loginpage/u/login', this.SignUpInfo)
+                axios.post('http://localhost:7000/loginpage/u/login/signup', this.SignUpInfo)
                 .then((response) => {
                     console.log(response.data.userId);
-                    
-
                 })
                 .catch(error => {
                     if (error.response) {

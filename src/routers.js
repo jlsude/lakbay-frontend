@@ -3,6 +3,11 @@ import SignUp from './components/SignUp.vue';
 import Login from './components/Login.vue';
 import QrScanner from './components/QrScanner.vue'
 import LandingPage from './components/landingpage.vue'
+import Sidebar from './components/Sidebar.vue'
+import LakbayContent from './components/LakbayContent.vue'
+
+import testing from './components/testing.vue'
+
 import { createRouter, createWebHistory } from 'vue-router';
 
 
@@ -31,8 +36,22 @@ const routes = [
         name: 'LandingPage',
         component: LandingPage,
         path: '/landing'
+    },
+    {
+        name: 'Sidebar',
+        component: Sidebar,
+        path: '/sidebar'
+    },
+    {
+        name: 'LakbayContent',
+        component: LakbayContent,
+        path: '/LakbayContent/:landmark_id'
+    },
+    {
+        name: 'testing',
+        component: testing,
+        path: '/testing'
     }
-
 
 ];
 

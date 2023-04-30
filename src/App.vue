@@ -14,7 +14,7 @@ export default {
 <style>
   #app {
     font-family: 'Inter';
-    margin-top: 60px;
+
   }
   @font-face {
     font-family: 'Inter';

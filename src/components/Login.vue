@@ -33,6 +33,7 @@ import axios from 'axios'
 import jwt_decode from 'jwt-decode'
 import Cookies from 'js-cookie'
 
+
 export default {
     name: 'Login',
     data() {
@@ -44,6 +45,7 @@ export default {
             Warning: " ",
             userToken: " ",
             authToken: '',
+
 
         };
     },
@@ -58,8 +60,8 @@ export default {
             
             if(this.LoginInfo.useremail && this.LoginInfo.userpassword){
                 this.Warning = "",
-                //ip address of the http requests may need to be changes if tested from other device
-                axios.post(`http://192.168.1.12:7000/loginpage/u/login`, this.LoginInfo)
+                //ip address of the http requests may need to be changed if tested from other device
+                axios.post(`http://192.168.1.21:7000/loginpage/u/login`, this.LoginInfo)
                 .then((response) => {
                     this.Warning = "Login Successful";
                     const userToken = response.data.token;
@@ -78,10 +80,10 @@ export default {
                 })
                 .catch(error => {
                     if (error.response) {
-                    console.log(error.response.data.message); // this will log "Invalid email or password."
-                    this.Warning = error.response.data.message;
+                        console.log(error.response.data.message); // this will log "Invalid email or password."
+                        this.Warning = error.response.data.message;
                     } else {
-                    console.log(error.message);
+                        console.log(error.message);
                     }
                 });
                 
@@ -101,6 +103,7 @@ export default {
     
     @media (max-width: 500px) {
         .logo-container {
+            margin-top: 10vh;
             max-width: 100%;
             text-align: center;
         }
