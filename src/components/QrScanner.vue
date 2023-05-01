@@ -6,7 +6,8 @@
 		<Scanpopup v-if = "showPopup" :message = "this.landmarkinfos.landmark_name" 
 			:landmark_id = "this.landmarkinfos.landmark_id"
 			v-on:close-popup="closePopupHandler"
-  			></Scanpopup>
+  		></Scanpopup>
+		<ScanpopupError v-if = "showPopupError"></ScanpopupError>
 
 		<div class="overlay" v-if="showPopup"></div>
 		<qrcode-stream @init="onInit" @decode="onDecode"  class="QRcode" :stream="stream"></qrcode-stream>
@@ -20,6 +21,8 @@ import Cookies from 'js-cookie';
 import { QrcodeStream } from 'vue3-qrcode-reader';
 import axios from 'axios';
 import Scanpopup from './Scanpopup.vue';
+import ScanpopupError from './ScanpopupError.vue';
+
 
 export default {
 	data(){
@@ -31,13 +34,13 @@ export default {
 			landmarkinfos: [],
 			qrcodecontent: '',
 			showPopup: false,
+			showPopupError: false,
 			
 
 		}
 	},
 	components:{
-		QrcodeStream, Scanpopup
-	},
+		QrcodeStream, Scanpopup, ScanpopupError },
 	mounted() {
 
 		//Authorization
@@ -132,6 +135,7 @@ export default {
 							{ headers: { Authorization: `Bearer ${userToken}` } })
 						.then((response) => {
 							console.log(response.data)
+
 						})
 						.catch((error) => {
 							console.error(error);
@@ -140,6 +144,8 @@ export default {
 					})
 					.catch((error) => {
 						console.error(error);
+						this.error = 'QR not found';
+						this.showPopupError = !this.showPopupError;
 					});
 			} else {
 				console.log("Contains empty")

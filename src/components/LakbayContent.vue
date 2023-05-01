@@ -39,12 +39,11 @@
 				<h1 class = "LandmarkName"> {{ landmarkinfos.landmark_name }}</h1>
 				<h2 class = "LandmarkAddress">{{ landmarkinfos.landmark_address }}</h2>
 				<h3 class = "LandmarkRateVisits">
-					<p>5.0/5.0</p>
-					<p>{{ landmarkinfos.landmark_visits }} Have Visited</p>
+					<p>{{this.landmarkratings}}/5.0</p>
+					<p>{{ landmarkinfos.landmark_visits }} have Visited</p>
 				</h3>
-
+				<!-- First Para -->
 				<p class = "LandmarkPara">{{ this.paragraphOne }}</p>
-
 				<div class = "body">
 					<div class = "slider-container">
 						<div class = "slide" v-for="(image, index) in 1" :key="index" >
@@ -55,9 +54,8 @@
 					</div>
 				</div>
 				<p class = "caption">{{ this.randomImage1Cap }}</p>
-
+				<!-- Second Para -->
 				<p class = "LandmarkPara">{{ this.paragraphTwo }}</p>
-
 				<div class = "body">
 					<div class = "slider-container">
 						<div class = "slide" v-for="(image, index) in 1" :key="index" >
@@ -66,10 +64,36 @@
 					</div>
 				</div>
 				<p class = "caption">{{ this.randomImage1Cap }}</p>
+
+				<!-- Third Para -->
 				<p class = "LandmarkPara">{{ this.paragraphThree }}</p>
 
 		</main>
 		<!-- ------------------------------------------------------------------------------------------ -->
+		<footer class = "footer">
+			<p class = "LandmarkReviewHeader1">How would you rate this place?</p>
+			
+			<div style = "display: flex;; justify-content: center;">
+				<button
+				v-for="(button, index) in reviewButtons"
+				:key="index"
+				:class="{ 'selected': selectedButton === button }"
+				@click="selectButton(button)"
+				:style="{ opacity: selectedButton && selectedButton !== button ? '0.5' : '1' }"
+				:disabled="!canInputReview"
+				>
+				{{ button }}
+				</button>
+			</div>
+			<p class = "LandmarkReviewHeader2">Write a review:</p>
+			<textarea :disabled="!canInputReview" class = "reviewText" type="text" v-model="textInput" placeholder="Share your thoughts with us!"></textarea>
+			
+			<p v-if = "reviewNotice1" class = "LandmarkReviewNotice">Seems like you've already reviewed this Landmark! Thanks a lot!</p>
+			<p v-if = "reviewNotice2" class = "LandmarkReviewNotice">Awesome! Your review has been saved! Enjoy your Lakbay!</p>
+
+			<button class = "submitButton" :disabled="!(selectedButton && textInput) || !canInputReview" @click="submitReview">Submit</button> 
+			<!--  -->
+		</footer>
 		
 	</div>
 </template>
@@ -78,6 +102,7 @@
 import SidebarToHome from './SidebarToHome.vue';
 import axios from 'axios'
 import Cookies from 'js-cookie';
+import jwtDecode from 'jwt-decode';
 
 export default {
 	name: 'LakbayContent',
@@ -96,6 +121,7 @@ export default {
 				landmark_visits: '',
 				landmark_typecontent: '',
 			},
+			landmarkratings: '',
 
 			landmarkparagraphs: [],
 			paragraphOne: '',
@@ -106,12 +132,24 @@ export default {
 			randomImage1Cap: '',
 			randomImage2: '',
 			randomImage2Cap: '',
+
+
+			reviewButtons: [1, 2, 3, 4, 5],
+			selectedButton: null,
+			textInput: null,
+
+			canInputReview: true,
+			reviewNotice1: false,
+			reviewNotice2: false,
+
+			userTokenReview: '',
         	
 		}
 		},
 	mounted() {
 		//Authorization
 		let userToken = Cookies.get('auth_token');
+		this.userTokenReview = userToken;
 			if (userToken) {
 				axios.get(`http://localhost:7000/home/u/userprofile`, {
 				headers: {
@@ -140,13 +178,14 @@ export default {
 				this.$router.push({name: 'Login'});
 			};
 
-
-
+		// This will be used as a major reference for all active api endpoints 
 		this.landmark_id = this.$route.params.landmark_id;
 		console.log(`Landmark ID: ${this.landmark_id}`);
-		// fetch landmark_id and display it in the component
+		
 
-		// Fetch landmark images
+
+
+		// Fetch landmark images ------------------------------------------------------------------------------------
 		axios.get(`http://192.168.1.21:7000/manage/locations/${this.landmark_id}/images`)
         .then((response) => {
 			this.contentimagedata = response.data
@@ -169,13 +208,15 @@ export default {
 				this.error = 'Failed to fetch landmark images.';
 		});
 
-		// Fetch landmark info NOT paragraphs
+
+
+		// Fetch landmark info NOT paragraphs ------------------------------------------------------------------------------------
 		axios.post(`http://192.168.1.21:7000/LakbayScan/u/fetching`, {landmarkid: this.landmark_id})
 		.then((response) => {
 			this.landmarkinfos = response.data[0]
 			console.log('fetch landmark info')
 			if (this.landmarkinfos) {
-				console.log("Test", this.landmarkinfos.landmark_name); // problem is here
+				console.log("Test", this.landmarkinfos.landmark_name);
 			}
 			console.log(response.data)
 
@@ -184,7 +225,27 @@ export default {
 				this.error = 'Failed to fetch landmark info.';
 		});
 
-		// Fetch landmark paragraphs
+
+		// Fetch landmark ratings -----------------------------------------------------
+		axios.post(`http://192.168.1.21:7000/LakbayScan/u/fetching/ratings`, {landmarkid: this.landmark_id})
+		.then((response) => {
+			console.log(response.data[0])
+			if (response.data[0].average_ratings !== null) {
+				this.landmarkratings = parseFloat(response.data[0].average_rating).toFixed(1);
+			} else {
+				this.landmarkratings = 0.0;
+			}
+			console.log('fetch landmark ratings: ', this.landmarkratings)
+			console.log(response.data)
+		}).catch((error) => {
+			console.error(error);
+			this.error = 'Failed to fetch landmark ratings.';
+		});
+
+
+
+
+		// Fetch landmark paragraphs ------------------------------------------------------------------------------------
 		axios.post(`http://192.168.1.21:7000/LakbayScan/u/fetching/paragraphs`, {landmarkid: this.landmark_id})
 		.then((response) => {
 			this.landmarkparagraphs = response.data
@@ -202,6 +263,28 @@ export default {
 		});
 
 
+
+
+		// Checks if user has already reviewed the landmark ------------------------------------------------------------------------------------
+		axios.post(`http://localhost:7000/LakbayScan/u/reviewlocation/checking`,
+			{ landmark_id: this.landmark_id },
+			{ headers: { Authorization: `Bearer ${userToken}` } })
+		.then((response) => {
+			const decoded = jwtDecode(userToken);
+
+			console.log("user ID: ", decoded.data.user_id)
+			console.log("landmark ID: ", this.landmark_id)
+			console.log(response.data)
+			if (response.data.results.length > 0){
+				this.canInputReview = !this.canInputReview;
+				this.reviewNotice1 = !this.reviewNotice1;
+			}
+		})
+			.catch((error) => {
+			console.log(error);
+		});
+
+
 		
 	},
 	methods: {
@@ -212,7 +295,42 @@ export default {
 		reDirectScan(){
 			console.log('Routing to QR Scanner')
 			this.$router.push({name: 'QrScanner'});
-		}
+		},
+
+		// review feature
+		selectButton(button) {
+			this.selectedButton = this.selectedButton === button ? null : button;
+			console.log('Selected button:', this.selectedButton);
+		},
+		submitReview() {
+			console.log(`Button: ${this.selectedButton}`);
+			console.log(`Text: ${this.textInput}`);
+
+			// Check if user has already reviewed the landmark
+			axios.post(`http://localhost:7000/LakbayScan/u/reviewlocation`, {
+				landmarkid: this.landmark_id,
+				reviewrate: this.selectedButton,
+				reviewinput: this.textInput,
+			}, {
+				headers: { Authorization: `Bearer ${this.userTokenReview}` },
+			})
+			.then((response) => {
+				const decoded = jwtDecode(this.userTokenReview);
+
+				console.log(`User ID: ${decoded.data.user_id}`);
+				console.log(`Landmark ID: ${this.landmark_id}`);
+				console.log(response.data);
+
+				if (response.data.success) {
+					this.reviewNotice2 = !this.reviewNotice2;
+					this.canInputReview = !this.canInputReview;
+				}
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+			}
+
 	}
 	}
 </script>
@@ -344,6 +462,7 @@ export default {
 		.LandmarkAddress{
 			font-size: 4.5vw;
 			font-weight: 600;
+			font-weight: 500;
 			margin-top: 0.5vh;
 			margin-bottom: 0.5vh;
 		}
@@ -351,9 +470,9 @@ export default {
 			display: flex; 
 			justify-content: space-between;
 			margin-top: -1vh;
-			font-size: 4.5vw;
+			font-size: 4.0vw;
 			font-weight: 500;
-			color: rgb(30, 30, 30);
+			color: rgb(65, 65, 65);
 		}
 		.LandmarkPara{
 			margin-bottom: 5vh;
@@ -367,6 +486,80 @@ export default {
 			
 			
 		}
+		.footer{
+			margin-inline: 4vw;
+			display: flex; 
+			flex-direction: column; 
+			justify-content: center;
+		}
+		.LandmarkReviewHeader1{
+			display: flex; 
+			justify-content: space-between;
+			margin-top: 1.5vh;
+			font-size: 4.0vw;
+			font-weight: 500;
+			color: rgb(24, 24, 24);
+		}
+
+		button {
+			background-color: #c4c4c4;
+			font-family: 'Inter';
+			border: none;
+			border-radius: 10px;
+			padding: 10px 20px;
+			margin-top: 20px;
+			margin: 5px;
+			font-size: 16px;
+			cursor: pointer;
+		}
+		.selected {
+			background-color: grey;
+			color: white;
+		}
+
+		.LandmarkReviewHeader2{
+			display: flex; 
+			justify-content: space-between;
+			margin-top: 1.5vh;
+			margin-bottom: 0.2vh;
+			font-size: 4.0vw;
+			font-weight: 500;
+			color: rgb(24, 24, 24);
+		}
+
+		.reviewText {
+			border: none;
+			font-family: 'Inter';
+			width: 90%;
+			margin-top: 1.5vh;
+			font-size: 16px;
+			padding: 5px;
+			align-self: center;
+			border-bottom: 10px black;
+
+		}
+
+		.reviewText:focus {
+			border: none;
+			outline: none; 
+		}
+		.LandmarkReviewNotice{
+			text-align: center;
+			margin-top: 1.5vh;
+			margin-bottom: 0.2vh;
+			font-size: 4.0vw;
+			font-weight: 500;
+			color: rgb(82, 82, 82);
+		}
+
+		.submitButton{
+			width: 30%;
+			font-family: 'Inter';
+			align-self: center;
+			margin-top: 1vh;
+			margin-bottom: 3.5vh;
+		}
+
 
 	}
 </style>
