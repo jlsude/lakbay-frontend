@@ -1,9 +1,8 @@
 <template>
     <div class="popup-container">
       <div class="popup-window">
-		<img class = "LakbayMap" src="../assets/beginLakbaySample.png" alt="">
-        <h3 class = "LocationHeader">Luneta Park</h3>
-        
+        <h3>Landmark Discovered!</h3>
+        <h5>Continue to {{ message }}?</h5>
 
         
       </div>
@@ -44,22 +43,11 @@
   
   .popup-window {
     text-align: center;
-	padding: 0.5vh;
-    width: 85vw;
-    height: 40vh;
+    width: 75vw;
+    height: 20vh;
     background: #c4c4c4;
     border-radius: 4vh;
     border: none;
-	padding-bottom: 4vh;
-  }
-  .LakbayMap{
-	margin-top: 3.5vh;
-	width: 80vw;
-	height: 30vh;
-	object-fit: cover;
-  }
-  .LocationHeader{
-	margin-bottom: 4vh;
   }
   </style>
   

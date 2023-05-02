@@ -138,6 +138,10 @@ import Sidebar from './Sidebar.vue';
 				this.showSidebar = !this.showSidebar;
 				
 			},
+			beginLakbay(){
+				console.log('Routing to Begin Lakbay')
+				this.$router.push({name: 'BeginLakbay'});
+			},
 			reDirectLakbay(userhistory){
 				console.log(`Redirecting to ${userhistory.landmark_name}`)
 				console.log(`Redirecting to ${userhistory.landmark_id}`)

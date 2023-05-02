@@ -115,7 +115,7 @@ import axios from 'axios'
     @media (max-width: 902px) {
 
         .logo-container {
-            margin-top: -5vh;
+            margin-top: 5vh;
             max-width: 100%;
             text-align: center;
 
@@ -172,6 +172,8 @@ import axios from 'axios'
             color: #000000;
         }
         .signup-input{
+            border: none;
+			border-radius: 3vw;
             width: 90%;
             height: 40px;
             padding-left: 20px;

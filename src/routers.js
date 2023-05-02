@@ -5,6 +5,8 @@ import QrScanner from './components/QrScanner.vue'
 import LandingPage from './components/landingpage.vue'
 import Sidebar from './components/Sidebar.vue'
 import LakbayContent from './components/LakbayContent.vue'
+import BeginLakbay from './components/BeginLakbay.vue'
+import BucketList from './components/BucketList.vue'
 
 import testing from './components/testing.vue'
 
@@ -46,6 +48,16 @@ const routes = [
         name: 'LakbayContent',
         component: LakbayContent,
         path: '/LakbayContent/:landmark_id'
+    },
+    {
+        name: 'BeginLakbay',
+        component: BeginLakbay,
+        path: '/BeginLakbay'
+    },
+    {
+        name: 'BucketList',
+        component: BucketList,
+        path: '/BucketList/:bucketlist_id'
     },
     {
         name: 'testing',

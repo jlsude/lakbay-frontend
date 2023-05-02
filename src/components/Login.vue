@@ -148,7 +148,8 @@ export default {
             color: #000000;
         }
         .login-input{
-            
+            border: none;
+			border-radius: 3vw;
             width: 90%;
             height: 40px;
             padding-left: 20px;
