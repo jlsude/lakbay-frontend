@@ -31,11 +31,14 @@
 			<!-- -------- -->
 			<h1 class = "LakbayBucketListHeader">Lakbay Bucket List</h1>
 			<div class = "footer-container">
+				<div class = "footer-section" v-for="BucketList in BucketLists" :key="BucketList.bucketlist_id">
+					<button class = "BucketListButton" v-on:click = "reDirectBucketList(BucketList)" v-if = "!showBucketLists">{{ BucketList.bucketlist_name }}</button>
+				</div>
 				<div class = "footer-section" v-for="i in 3" :key="i">
-				<button class = "BucketListButton" v-on:click = "reDirectBucketList()" v-if = "!showBucketLists">Challenge</button>
-				<button class = "BucketListButtonFalse" v-if = "showBucketLists">Data insuficient</button>
+					<button class = "BucketListButtonFalse" v-if = "showBucketLists">Data insuficient</button>
 				</div>
 			</div>
+			
 		</div>
 		
 	</div>
@@ -65,8 +68,6 @@ import Sidebar from './Sidebar.vue';
 			showSidebar: false,
 			showRecentLakbay: false,
 			showBucketLists: false,
-			
-
 
 			}
 		},
@@ -124,6 +125,25 @@ import Sidebar from './Sidebar.vue';
 				this.error = 'Failed to fetch Landmarks.';
 			});
 
+			//Bucketlist ----------------------------------------------
+			axios.get(`http://localhost:7000/bucketlist/allview`)
+			.then((response) => {
+				this.BucketLists = response.data.slice(-3);
+				console.log('BucketLists', this.BucketLists);
+
+				if (this.BucketLists.length < 1) {
+					this.showBucketLists = !this.showBucketLists;
+					console.log('Buckelists data insuficient', this.BucketLists);
+					
+				} else {
+					
+      				console.log("Buckelists greater than 3");
+				}
+			})
+			.catch((error) => {
+				console.error(error);
+				this.error = 'Failed to fetch Landmarks.';
+			});
 
 		
 		},
@@ -147,8 +167,10 @@ import Sidebar from './Sidebar.vue';
 				console.log(`Redirecting to ${userhistory.landmark_id}`)
 				this.$router.push({ name: 'LakbayContent', params: {landmark_id: userhistory.landmark_id} });
 			},
-			reDirectBucketList(){
-
+			reDirectBucketList(BucketList){
+				console.log(`Redirecting to ${BucketList.bucketlist_name}`)
+				console.log(`Redirecting to ${BucketList.bucketlist_id}`)
+				this.$router.push({ name: 'BucketList', params: {bucketlist_id: BucketList.bucketlist_id} });
 			}
 		}
 	}

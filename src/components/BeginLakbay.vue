@@ -17,7 +17,7 @@
 		</header>
 		<div style ="display: flex; flex-direction: column; justify-content: center; text-align: center;">
 			<h3 class = "beginLakbayHeader">Begin your Lakbay</h3>
-			<input class = "beginLakbayInput"  v-model = "searchInput" type = "email" placeholder = "Search Landmarks"/>
+			<input class = "beginLakbayInput"  v-model = "searchInput" type = "text" placeholder = "Search Landmarks"/>
 			<p class = "inputLakbayNotice">Enter keywords of a place to search for Lakbay near you.</p>
 		</div>
 		<div style ="display: flex; flex-direction: column; align-items: center;">
@@ -41,6 +41,7 @@ import SidebarToHome from './SidebarToHome.vue';
 		name: 'Home',
 		data(){
 			return{
+			
 			
 			searchInput: "",
 			showSidebar: false,
@@ -76,7 +77,7 @@ import SidebarToHome from './SidebarToHome.vue';
 			};
 
 
-
+			// if search input is empty launch get request, must also be in methods not just in mounted
 		
 		},
 

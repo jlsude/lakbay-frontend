@@ -1,34 +1,34 @@
 <template>
-    <div class="popup-container">
-      <div class="popup-window">
-        <h3>Landmark Discovered!</h3>
-        <h5>Continue to {{ message }}?</h5>
-
-        
-      </div>
+  <div class="popup-container">
+    <div class="popup-window">
+      <img class = "LakbayMap" src="../assets/beginLakbaySample.png" alt="">
+      <h3 class = "LocationHeader">Luneta Park</h3>
+  
+      
     </div>
-  </template>
-  
-  <script>
-  export default {
-    name: "BeginLakbayPopup",
-    props: {
-      bucketlist_id: {
-        type: Number,
-        required: true,
-      }
-    },
-    
-    methods: {
+  </div>
+</template>
 
-        closePopup() {
-            this.$emit("close-popup", "closePopup");
-        }
+<script>
+export default {
+  name: "BeginLakbayPopup",
+  props: {
+    bucketlist_id: {
+      type: Number,
+      required: true,
     }
-  };
-  </script>
+  },
   
-  <style scoped>
+  methods: {
+
+      closePopup() {
+          this.$emit("close-popup", "closePopup");
+      }
+  }
+};
+</script>
+
+<style scoped>
   .popup-container {
     position: fixed;
     top: 0;
@@ -40,14 +40,25 @@
     align-items: center;
     z-index: 999;
   }
-  
+
   .popup-window {
     text-align: center;
-    width: 75vw;
-    height: 20vh;
+  padding: 0.5vh;
+    width: 85vw;
+    height: 40vh;
     background: #c4c4c4;
     border-radius: 4vh;
     border: none;
+  padding-bottom: 4vh;
   }
-  </style>
-  
+  .LakbayMap{
+  margin-top: 3.5vh;
+  border-radius: 3vw;
+  width: 80vw;
+  height: 30vh;
+  object-fit: cover;
+  }
+  .LocationHeader{
+  margin-bottom: 4vh;
+  }
+</style>

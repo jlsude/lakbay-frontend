@@ -17,14 +17,14 @@
 		</header>
 		<div style ="display: flex; flex-direction: column; justify-content: center; text-align: center;">
 			<h3 class = "BucketListHeader">Lakbay Bucket List:</h3>
-			<h2 class = "BucketListNameHeader">The Walled City</h2>
-			<img class = "BucketListImage" src="../assets/BucketLocSample.png" alt="">
+			<h2 class = "BucketListNameHeader">{{this.BucketList.bucketlist_name}}</h2>
+			<img class = "BucketListImage" :src = "this.BucketList.url" alt="">
 			
-			<p class = "BucketListIntro">Embark on a Lakbay through the infamous Walled City of Intramuros, where several historical structures dating back several decades or even centuries await you.</p>
+			<p class = "BucketListIntro">{{ this.BucketList.bucketlist_intro }}</p>
 		</div>
 		<div style ="display: flex; flex-direction: column; align-items: center;">
-			<div v-for = "map in 10" :key = "map.map_id">
-				<button class = "BucketlistLocation" v-on:click = "reDirectBeginLakbay(map)">Intramuros, Manila</button>
+			<div v-for = "locations in bucketlistlocations" :key = "locations.landmark_id">
+				<button class = "BucketlistLocation">{{locations.landmark_name}}</button>
 			</div>
 		</div>
 		
@@ -43,14 +43,20 @@ import SidebarToHome from './SidebarToHome.vue';
 		name: 'Home',
 		data(){
 			return{
-			
+			bucketlist_id: '',
 			searchInput: "",
 			showSidebar: false,
+
+			BucketList: [],
+			bucketlistlocations: [],
 			
 			}
 		},
 
 		mounted(){
+
+			this.bucketlist_id = this.$route.params.bucketlist_id;
+
 			//Authorization
 			let userToken = Cookies.get('auth_token');
 			if (userToken) {
@@ -77,6 +83,36 @@ import SidebarToHome from './SidebarToHome.vue';
 				this.$router.push({name: 'Login'});
 			};
 
+			
+			// Fetch Bucketlist------------------------------------------------------------------------------------
+			axios.get(`http://192.168.1.21:7000/bucketlist/view/${this.bucketlist_id}`)
+			.then((response) => {
+				this.BucketList = response.data[0]
+				console.log(this.BucketList)
+				console.log('Name of bucketlist', this.BucketList.bucketlist_name)
+
+				
+				
+
+			}).catch((error) => {
+					console.error(error);
+					this.error = 'Failed to fetch bucket list data.';
+			});
+
+			// Fetch Bucketlist location -----------------------------------------
+			axios.get(`http://192.168.1.21:7000/bucketlist/view/locations/${this.bucketlist_id}`)
+			.then((response) => {
+				this.bucketlistlocations = response.data
+				console.log(this.bucketlistlocations)
+				
+
+				
+				
+
+			}).catch((error) => {
+					console.error(error);
+					this.error = 'Failed to fetch bucket list data.';
+			});
 
 
 		
