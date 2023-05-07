@@ -42,9 +42,9 @@
     </div>
     <footer class = "bottom-header">
         <h1 class = "warning">{{ Warning }}</h1>
-        <button v-on:click = "signUp" class = "signupbutton">Sign Up</button>
+        <button v-on:click = "signUp" class = "signupbutton">Sign up</button>
         <p class = "back-to-login">
-         <router-link class = "router-link" to = '/'>Back to the Login page</router-link>
+         <router-link class = "router-link" to = '/login'>Back to the Login page</router-link>
         </p>
     </footer>
     </div>
@@ -53,7 +53,8 @@
 
 <script>
 import axios from 'axios'
-
+import jwt_decode from 'jwt-decode'
+import Cookies from 'js-cookie'
 
     export default {
     name: 'SignUp',
@@ -67,7 +68,8 @@ import axios from 'axios'
                 usercity: '',
                 useremail: '',
                 userpassword: '',
-                ConfirmPassword: ''
+                ConfirmPassword: '',
+                userrole:'USER',
             },
             Warning: '',
             TermsAccepted: false,
@@ -84,7 +86,19 @@ import axios from 'axios'
                 //ip address of the http requests may need to be changes if tested from other device
                 axios.post('http://localhost:7000/loginpage/u/login/signup', this.SignUpInfo)
                 .then((response) => {
-                    console.log(response.data.userId);
+                    console.log(response.data.token);
+                    const userToken = response.data.token;
+                    console.log(response.data.token)
+
+                    const decoded = jwt_decode(userToken);
+                    console.log(decoded.data.user_id) // the user id of the user who logins
+
+                    console.log(response.status)
+                    if(response.status==200){
+                        Cookies.set('auth_token', userToken);
+                        console.log("routing to home")
+                        this.$router.push({name: 'Home'})
+                    }
                 })
                 .catch(error => {
                     if (error.response) {

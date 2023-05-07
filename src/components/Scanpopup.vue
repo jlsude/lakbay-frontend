@@ -48,7 +48,7 @@
   };
   </script>
   
-  <style scoped>
+<style scoped>
   .popup-container {
     position: fixed;
     top: 0;
@@ -69,5 +69,5 @@
     border-radius: 4vh;
     border: none;
   }
-  </style>
+</style>
   

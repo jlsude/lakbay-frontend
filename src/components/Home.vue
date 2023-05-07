@@ -17,7 +17,9 @@
 		</header>
 		<div class = "qrdiv">
 			
-			<button class = "qrbutton" v-on:click = "QRscanner">QR-Scanner</button>
+			<button class = "qrbutton" v-on:click = "QRscanner">
+				<img style = "width: 30vh; height: 30vh; display: block; margin: auto;" src="../assets/QRScanLogo.png" alt=""/>
+			</button>
 			<button class = "beginLakbay" v-on:click = "beginLakbay" >Begin your Lakbay</button>
 			<h1 class = "recentLakbay">Your Recent Lakbay</h1>
 
@@ -104,8 +106,8 @@ import Sidebar from './Sidebar.vue';
 			};
 
 			
-			//Recent Lakbay - focus on recent lakbay
-			axios.get(`http://192.168.1.21:7000/home/u/userhistory`, {
+			//Recent Lakbay - focus on recent lakbay	
+			axios.get(`http://localhost:7000/home/u/userhistory`, {
 				headers: { Authorization: `Bearer ${userToken}`}})
 			.then((response) => {
 				this.userhistory = response.data.slice(-2);
@@ -254,11 +256,10 @@ import Sidebar from './Sidebar.vue';
 		}
 		.qrbutton{
 			border: none;
-			padding: 18vh;
-			margin-top: 5vh;
+			margin-top: 7vh;
 			align-self: center;
-			width: 25%;
-			height: 40px;
+			width: 35vh;
+			height: 35vh;
 			border-radius: 5vh;
 			background-color: #c4c4c4;
 
@@ -269,6 +270,7 @@ import Sidebar from './Sidebar.vue';
 			font-size: 15px;
 			line-height: 1.5;
 			color: #000000;
+			filter: drop-shadow(0px -2px 17px #3C3C3C);
 		}
 		.beginLakbay{
 			border: none;

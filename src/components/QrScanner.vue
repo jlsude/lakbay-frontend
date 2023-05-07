@@ -1,18 +1,26 @@
 <template>
-	<div class="qr-container">
-		<p>{{ error }}</p>
-		<p style = "color: white">{{ decodedQR}}</p>
+	<div style = "display: flex; flex-direction: column; justify-content: center;">
+		<div class="logo-container">
+        	<img class="logo" src="../assets/LakbayLogo.png" alt="Lakbay Logo">
+		</div>
+		
+		<div class="qr-container">
+			
+			<p style = "color: white">{{ decodedQR}}</p>
 
-		<Scanpopup v-if = "showPopup" :message = "this.landmarkinfos.landmark_name" 
-			:landmark_id = "this.landmarkinfos.landmark_id"
-			v-on:close-popup="closePopupHandler"
-  		></Scanpopup>
-		<ScanpopupError v-if = "showPopupError"></ScanpopupError>
+			<Scanpopup v-if = "showPopup" :message = "this.landmarkinfos.landmark_name" 
+				:landmark_id = "this.landmarkinfos.landmark_id"
+				v-on:close-popup="closePopupHandler"
+			></Scanpopup>
 
-		<div class="overlay" v-if="showPopup"></div>
-		<qrcode-stream @init="onInit" @decode="onDecode"  class="QRcode" :stream="stream"></qrcode-stream>
-		<button class = "backbutton" v-on:click = "backToHome">Back to Home</button>
+			<ScanpopupError v-if = "showPopupError"></ScanpopupError>
 
+			<div class="overlay" v-if="showPopup"></div>
+
+			<qrcode-stream @init="onInit" @decode="onDecode"  class="QRcode" :stream="stream"></qrcode-stream>
+			<button class = "backbutton" v-on:click = "backToHome">Back to Home</button>
+
+		</div>
 	</div>
 </template>
 
@@ -111,6 +119,8 @@ export default {
 			} finally {
 				// hide loading indicator
 			}
+
+			console.log("ERROR: ",this.error)
 		},
 		onDecode(decodedQR){
 			this.qrcodecontent = decodedQR;
@@ -120,7 +130,7 @@ export default {
 				console.log("Axios initializing")
 				// endpoint 1
 				
-				axios.post(`http://192.168.1.21:7000/LakbayScan/u/scanning`, {qrcodecontent: this.qrcodecontent}) 
+				axios.post(`http://localhost:7000/LakbayScan/u/scanning`, {qrcodecontent: this.qrcodecontent}) 
 					.then((response) => {
 						this.landmarkinfos = response.data[0]
 						this.showPopup = !this.showPopup;
@@ -130,7 +140,7 @@ export default {
 
 						//endpoint 2
 						let userToken = Cookies.get('auth_token');
-						axios.post(`http://192.168.1.21:7000/home/u/adduserhistory`,
+						axios.post(`http://localhost:7000/home/u/adduserhistory`,
 							{ landmark_id: this.landmarkinfos.landmark_id },
 							{ headers: { Authorization: `Bearer ${userToken}` } })
 						.then((response) => {
@@ -169,23 +179,46 @@ export default {
 </script>
 
 <style scoped>
+	@media (max-width: 500px) {
+		
+	.logo-container {
+		margin-top: 10vh;
+		max-width: 100%;
+		text-align: center;
+	}
+	.logo {
+		margin: auto;
+		width: 70%;
+		filter: drop-shadow(-9px 14px 48px #000);
+	}
 	.qr-container{
-		margin-top: 27vh;
+		display: flex;
+		flex-direction: column;
+		margin-top: 10vh;
 		background: #3C3C3C;
 		padding: 10px;
 		width: auto;
-		align-items: center;
-		text-align: center;
+		justify-content: center;
+		border-radius: 5vh;
+		object-fit: contain;
+		filter: drop-shadow(0px 16px 37px #000);
 	
 	}
 	.QRcode{
 		margin-top: 0px;
-		width: 40vh;
+		width: inherit;
+		height: 30vh;
+		/* border: 1px dashed red; */
+		margin: auto;
+		object-fit: cover;
 	}
 	
 	.backbutton{
 		border: none;
-		margin: 50px;
+		
+		margin-top: 10vh;
+		margin-bottom: 5vh;
+		
 		align-self: center;
 		width: 30vw;
 		height: 40px;
@@ -217,5 +250,6 @@ export default {
 	}
 
 
+	}
 
 	</style>

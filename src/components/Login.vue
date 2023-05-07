@@ -6,7 +6,7 @@
     </div>
 
     <div class = login-container>
-        <h1 class = "login-header">Welcome back to Lakbay</h1>
+        <h3 class = "login-header">Welcome back to Lakbay</h3>
         <div class = login-styles-container>
             <h1 class = "login-styles">Email</h1>
             <input class = "login-input"  v-model = "LoginInfo.useremail" type = "email" placeholder = "Enter Email"/>
@@ -61,7 +61,7 @@ export default {
             if(this.LoginInfo.useremail && this.LoginInfo.userpassword){
                 this.Warning = "",
                 //ip address of the http requests may need to be changed if tested from other device
-                axios.post(`http://192.168.1.21:7000/loginpage/u/login`, this.LoginInfo)
+                axios.post(`http://localhost:7000/loginpage/u/login`, this.LoginInfo)
                 .then((response) => {
                     this.Warning = "Login Successful";
                     const userToken = response.data.token;

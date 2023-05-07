@@ -9,9 +9,9 @@
         
             <div class = "labels">
                 
-                <label class = "label">My Account</label>
-                <label class = "label">Dark Mode</label>
-                <label class = "label">Settings</label>
+                <label class = "label" style="opacity: 0.6;">My Account</label>
+                <label class = "label" style="opacity: 0.6;">Dark Mode</label>
+                <label class = "label" style="opacity: 0.6;">Settings</label>
                 <label class = "label" v-on:click = "logout">Logout</label>
 
             </div>

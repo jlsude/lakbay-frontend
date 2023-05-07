@@ -7,10 +7,13 @@ import Sidebar from './components/Sidebar.vue'
 import LakbayContent from './components/LakbayContent.vue'
 import BeginLakbay from './components/BeginLakbay.vue'
 import BucketList from './components/BucketList.vue'
+import landingpageVue from './components/landingpage.vue';
 
 import testing from './components/testing.vue'
 
+
 import { createRouter, createWebHistory } from 'vue-router';
+
 
 
 const routes = [
@@ -27,7 +30,7 @@ const routes = [
     {
         name: 'Login',
         component: Login,
-        path: '/' //temporarily, supposed to be the landing page
+        path: '/login' 
     },
     {
         name: 'QrScanner',
@@ -63,7 +66,12 @@ const routes = [
         name: 'testing',
         component: testing,
         path: '/testing'
-    }
+    },
+    {
+        name: 'landing',
+        component: landingpageVue,
+        path: '/'
+    },
 
 ];
 

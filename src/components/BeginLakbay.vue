@@ -17,12 +17,17 @@
 		</header>
 		<div style ="display: flex; flex-direction: column; justify-content: center; text-align: center;">
 			<h3 class = "beginLakbayHeader">Begin your Lakbay</h3>
-			<input class = "beginLakbayInput"  v-model = "searchInput" type = "text" placeholder = "Search Landmarks"/>
+			<div style = " display: flex; flex-direction: row; justify-content: center;">
+				<input class = "beginLakbayInput"  v-model = "searchInput" type = "text" placeholder = "Search Landmarks"/>
+				<button class = "searchButton" v-on:click = "searchMap(searchInput)">
+					<img style = "width: 3vh; height: 3vh; display: block; margin: auto;" src="../assets/iconSearch.png" alt="">
+				</button>
+			</div>
 			<p class = "inputLakbayNotice">Enter keywords of a place to search for Lakbay near you.</p>
 		</div>
 		<div style ="display: flex; flex-direction: column; align-items: center;">
-			<div v-for = "map in 10" :key = "map.map_id">
-				<button class = "LakbayBeginButton" v-on:click = "reDirectBeginLakbay(map)">Intramuros, Manila</button>
+			<div v-for = "map in lakbaymaps" :key = "map.map_id">
+				<button class = "LakbayBeginButton" v-on:click = "reDirectBeginLakbay(map)">{{ map.map_location }}</button>
 			</div>
 		</div>
 		
@@ -35,14 +40,15 @@
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import SidebarToHome from './SidebarToHome.vue';
+import BeginLakbayPopup from './BeginLakbayPopup.vue'
 
 	export default {
-  		components: { SidebarToHome },
+  		components: { SidebarToHome, BeginLakbayPopup },
 		name: 'Home',
 		data(){
 			return{
 			
-			
+			lakbaymaps: [],
 			searchInput: "",
 			showSidebar: false,
 			
@@ -56,7 +62,7 @@ import SidebarToHome from './SidebarToHome.vue';
 				axios.get(`http://localhost:7000/home/u/userprofile`, 
 				{ headers: { Authorization: `Bearer ${userToken}`} })
 				.then((response) => {
-				this.userProfile = response.data[0];
+					this.userProfile = response.data[0];
 				})
 				.catch(error => {
 				if (error.response && error.response.status === 401) {
@@ -77,14 +83,45 @@ import SidebarToHome from './SidebarToHome.vue';
 			};
 
 
-			// if search input is empty launch get request, must also be in methods not just in mounted
-		
+			// if search input is empty launch the get ALL request, must also be in methods not just in mounted
+			axios.get('http://localhost:7000/maps/allview')
+			.then((response) => {
+				this.lakbaymaps = response.data
+				console.log(this.lakbaymaps)
+			})
+			.catch((error) => {
+				console.error(error);
+				this.error = 'Failed to fetch maps.';
+			});
 		},
 
 		methods: {
 			showingSidebar(){
 				this.showSidebar = !this.showSidebar;
-
+			},
+			searchMap(searchInput){
+				if (searchInput.length > 0){
+					axios.post('http://localhost:7000/maps/search/keywords', {keywords: this.searchInput})
+					.then((response) => {
+						console.log(this.searchInput)
+						this.lakbaymaps = response.data
+						console.log(this.lakbaymaps)
+					})
+					.catch((error) => {
+						console.error(error);
+						this.error = 'Failed to fetch maps.';
+					});
+				} else {
+					axios.get('http://localhost:7000/maps/allview')
+					.then((response) => {
+						this.lakbaymaps = response.data
+						console.log(this.lakbaymaps)
+					})
+					.catch((error) => {
+						console.error(error);
+						this.error = 'Failed to fetch maps.';
+					});
+				}
 			},
 			reDirectBeginLakbay(map){
 				
@@ -171,7 +208,7 @@ import SidebarToHome from './SidebarToHome.vue';
 		.beginLakbayInput{
             border: none;
 			border-radius: 3vw;
-            width: 80%;
+            width: 70%;
             height: 40px;
 			text-align: center;
 			align-self: center;
@@ -179,6 +216,14 @@ import SidebarToHome from './SidebarToHome.vue';
             color: #ffffff;
             background-color: #3C3C3C;
         }
+		.searchButton{
+			margin-left: 2vw; 
+			width: 5vh; 
+			height: 5vh;
+			border: none;
+			border-radius: 2vw;
+			background-color: #c4c4c4;
+		}
 		.inputLakbayNotice{
 			text-align: center;
 			padding-inline: 8vw;
@@ -207,7 +252,7 @@ import SidebarToHome from './SidebarToHome.vue';
 			overflow: hidden;
 			text-overflow: ellipsis;
 		}
-
+		
 
 		.LakbayBeginButton:active {
 				background-color: #3C3C3C;

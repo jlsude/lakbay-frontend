@@ -85,7 +85,7 @@ import SidebarToHome from './SidebarToHome.vue';
 
 			
 			// Fetch Bucketlist------------------------------------------------------------------------------------
-			axios.get(`http://192.168.1.21:7000/bucketlist/view/${this.bucketlist_id}`)
+			axios.get(`http://localhost:7000/bucketlist/view/${this.bucketlist_id}`)
 			.then((response) => {
 				this.BucketList = response.data[0]
 				console.log(this.BucketList)
@@ -100,7 +100,7 @@ import SidebarToHome from './SidebarToHome.vue';
 			});
 
 			// Fetch Bucketlist location -----------------------------------------
-			axios.get(`http://192.168.1.21:7000/bucketlist/view/locations/${this.bucketlist_id}`)
+			axios.get(`http://localhost:7000/bucketlist/view/locations/${this.bucketlist_id}`)
 			.then((response) => {
 				this.bucketlistlocations = response.data
 				console.log(this.bucketlistlocations)
@@ -248,8 +248,7 @@ import SidebarToHome from './SidebarToHome.vue';
 		}
 
 
-		.beginLakbay:active, .logoutbutton:active,
-		.LakbayRecent:active, .BucketListButton:active {
+		.BucketListButton:active {
 				background-color: #3C3C3C;
 			}
 	}

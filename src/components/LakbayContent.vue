@@ -186,7 +186,7 @@ export default {
 
 
 		// Fetch landmark images ------------------------------------------------------------------------------------
-		axios.get(`http://192.168.1.21:7000/manage/locations/${this.landmark_id}/images`)
+		axios.get(`http://localhost:7000/manage/locations/${this.landmark_id}/images`)
         .then((response) => {
 			this.contentimagedata = response.data
 			console.log(this.contentimagedata)
@@ -211,7 +211,7 @@ export default {
 
 
 		// Fetch landmark info NOT paragraphs ------------------------------------------------------------------------------------
-		axios.post(`http://192.168.1.21:7000/LakbayScan/u/fetching`, {landmarkid: this.landmark_id})
+		axios.post(`http://localhost:7000/LakbayScan/u/fetching`, {landmarkid: this.landmark_id})
 		.then((response) => {
 			this.landmarkinfos = response.data[0]
 			console.log('fetch landmark info')
@@ -227,10 +227,10 @@ export default {
 
 
 		// Fetch landmark ratings -----------------------------------------------------
-		axios.post(`http://192.168.1.21:7000/LakbayScan/u/fetching/ratings`, {landmarkid: this.landmark_id})
+		axios.post(`http://localhost:7000/LakbayScan/u/fetching/ratings`, {landmarkid: this.landmark_id})
 		.then((response) => {
-			console.log(response.data[0])
-			if (response.data[0].average_ratings !== null) {
+			console.log("Ratings: ",response.data[0].average_rating)
+			if (response.data[0].average_rating !== null) { // updated from response.data[0].average_ratings !== null
 				this.landmarkratings = parseFloat(response.data[0].average_rating).toFixed(1);
 			} else {
 				this.landmarkratings = 0.0;
@@ -246,7 +246,7 @@ export default {
 
 
 		// Fetch landmark paragraphs ------------------------------------------------------------------------------------
-		axios.post(`http://192.168.1.21:7000/LakbayScan/u/fetching/paragraphs`, {landmarkid: this.landmark_id})
+		axios.post(`http://localhost:7000/LakbayScan/u/fetching/paragraphs`, {landmarkid: this.landmark_id})
 		.then((response) => {
 			this.landmarkparagraphs = response.data
 			console.log(' fetch landmark paragraphs')
