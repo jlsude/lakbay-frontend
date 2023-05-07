@@ -3,8 +3,7 @@
     <div class="popup-window">
       <img class = "LakbayMap" src="../assets/beginLakbaySample.png" alt="">
       <h3 class = "LocationHeader">Luneta Park</h3>
-  
-      
+
     </div>
   </div>
 </template>
@@ -13,14 +12,16 @@
 export default {
   name: "BeginLakbayPopup",
   props: {
-    bucketlist_id: {
+    map_id: {
       type: Number,
       required: true,
     }
   },
-  
-  methods: {
+  mounted(){
+    axios.get(`http://localhost:7000/maps/view/${mapid}`)
+  },
 
+  methods: {
       closePopup() {
           this.$emit("close-popup", "closePopup");
       }
