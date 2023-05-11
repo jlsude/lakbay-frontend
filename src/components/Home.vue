@@ -110,7 +110,7 @@ import Sidebar from './Sidebar.vue';
 			axios.get(`http://localhost:7000/home/u/userhistory`, {
 				headers: { Authorization: `Bearer ${userToken}`}})
 			.then((response) => {
-				this.userhistory = response.data.slice(-2);
+				this.userhistory = response.data.slice(-2).reverse();
 				console.log('Recent Lakbay data', this.userhistory);
 
 				if (this.userhistory.length < 2) {

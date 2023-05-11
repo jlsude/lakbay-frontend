@@ -27,8 +27,17 @@
 		</div>
 		<div style ="display: flex; flex-direction: column; align-items: center;">
 			<div v-for = "map in lakbaymaps" :key = "map.map_id">
-				<button class = "LakbayBeginButton" v-on:click = "reDirectBeginLakbay(map)">{{ map.map_location }}</button>
+				<button class = "LakbayBeginButton" @click = "showBeginLakbay(map)">{{ map.map_location }}</button>
+
 			</div>
+			<BeginLakbayPopup v-if = "showMap" :map_location = "lakbaymapchosen.map_location"
+					:url = "lakbaymapchosen.url"/>
+
+			<div class="overlay" v-if="showMap" @click="closeBeginLakbay()"></div>
+			<div class="fakeoverlay" v-if="showMap" @click="closeBeginLakbay()"></div>
+			
+				
+
 		</div>
 		
 
@@ -51,6 +60,14 @@ import BeginLakbayPopup from './BeginLakbayPopup.vue'
 			lakbaymaps: [],
 			searchInput: "",
 			showSidebar: false,
+			
+			showMap: false,
+			
+			focuslakbaymap: "",
+			lakbaymapchosen: {},
+
+			chosenmaplocationname: null,
+			chosenimageurl: null,
 			
 			}
 		},
@@ -123,8 +140,26 @@ import BeginLakbayPopup from './BeginLakbayPopup.vue'
 					});
 				}
 			},
-			reDirectBeginLakbay(map){
+			showBeginLakbay(map){
+				this.showMap = !this.showMap
+				console.log(map)
+				this.focuslakbaymap = map.map_id
+				console.log(this.focuslakbaymap)
+				axios.post('http://localhost:7000/maps/get/one', { mapid : this.focuslakbaymap})
+				.then((response) => {
+					this.lakbaymapchosen = response.data[0]
+					console.log(response.data[0])
+					
+				})
+				.catch((error) => {
+					console.log(error);
+					this.error = 'Failed to fetch maps.';
+				})
 				
+				
+			},
+			closeBeginLakbay(){
+				this.showMap = !this.showMap
 			}
 		}
 	}
@@ -167,6 +202,19 @@ import BeginLakbayPopup from './BeginLakbayPopup.vue'
 			width: 100%;
 			background-color: rgba(0, 0, 0, 0.5);
 			opacity: 0.5;
+			z-index: 500;
+			transition: opacity 5s;
+			
+		}
+		.fakeoverlay {
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			width: 100%;
+			background-color: rgba(0, 0, 0, 0.5);
+			opacity: 0.0;
 			z-index: 9999;
 			transition: opacity 5s;
 			

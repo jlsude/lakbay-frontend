@@ -1,8 +1,8 @@
 <template>
   <div class="popup-container">
     <div class="popup-window">
-      <img class = "LakbayMap" src="../assets/beginLakbaySample.png" alt="">
-      <h3 class = "LocationHeader">Luneta Park</h3>
+      <img class = "LakbayMap" :src = " this.url " alt="">
+      <h3 class = "LocationHeader">{{ map_location }}</h3>
 
     </div>
   </div>
@@ -12,20 +12,17 @@
 export default {
   name: "BeginLakbayPopup",
   props: {
-    map_id: {
-      type: Number,
+    map_location: {
+      type: null,
       required: true,
-    }
-  },
-  mounted(){
-    axios.get(`http://localhost:7000/maps/view/${mapid}`)
-  },
+    },
+    url: {
+      type: null,
+      required: true,
+    },
 
-  methods: {
-      closePopup() {
-          this.$emit("close-popup", "closePopup");
-      }
-  }
+  },
+  
 };
 </script>
 
@@ -44,22 +41,24 @@ export default {
 
   .popup-window {
     text-align: center;
-  padding: 0.5vh;
-    width: 85vw;
-    height: 40vh;
-    background: #c4c4c4;
+    padding-inline: 1.25vh;
+    width: fit-content;
+    height: fit-content;
+    background: #3c3c3c;
     border-radius: 4vh;
     border: none;
-  padding-bottom: 4vh;
+    padding-bottom: 1vh;
+
   }
   .LakbayMap{
   margin-top: 3.5vh;
   border-radius: 3vw;
-  width: 80vw;
-  height: 30vh;
+  width: 38.6363636vh;
+  height: 21.2488889vh;
   object-fit: cover;
   }
   .LocationHeader{
-  margin-bottom: 4vh;
+  margin-bottom: 1vh;
+  color: #c4c4c4;
   }
 </style>
