@@ -37,6 +37,7 @@
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import SidebarToHome from './SidebarToHome.vue';
+import { SERVER_ADDRESS } from '../routers';
 
 	export default {
   		components: { SidebarToHome },
@@ -60,7 +61,7 @@ import SidebarToHome from './SidebarToHome.vue';
 			//Authorization
 			let userToken = Cookies.get('auth_token');
 			if (userToken) {
-				axios.get(`http://localhost:7000/home/u/userprofile`, 
+				axios.get(`${SERVER_ADDRESS}/home/u/userprofile`, 
 				{ headers: { Authorization: `Bearer ${userToken}`} })
 				.then((response) => {
 				this.userProfile = response.data[0];
@@ -85,7 +86,7 @@ import SidebarToHome from './SidebarToHome.vue';
 
 			
 			// Fetch Bucketlist------------------------------------------------------------------------------------
-			axios.get(`http://localhost:7000/bucketlist/view/${this.bucketlist_id}`)
+			axios.get(`${SERVER_ADDRESS}/bucketlist/view/${this.bucketlist_id}`)
 			.then((response) => {
 				this.BucketList = response.data[0]
 				console.log(this.BucketList)
@@ -100,7 +101,7 @@ import SidebarToHome from './SidebarToHome.vue';
 			});
 
 			// Fetch Bucketlist location -----------------------------------------
-			axios.get(`http://localhost:7000/bucketlist/view/locations/${this.bucketlist_id}`)
+			axios.get(`${SERVER_ADDRESS}/bucketlist/view/locations/${this.bucketlist_id}`)
 			.then((response) => {
 				this.bucketlistlocations = response.data
 				console.log(this.bucketlistlocations)

@@ -14,7 +14,7 @@ import testing from './components/testing.vue'
 
 import { createRouter, createWebHistory } from 'vue-router';
 
-
+export const SERVER_ADDRESS = 'http://localhost:7000';
 
 const routes = [
     {
@@ -75,9 +75,13 @@ const routes = [
 
 ];
 
+
+
 const router = createRouter({
     history: createWebHistory(),
     routes,
 });
+
+
 
 export default router;

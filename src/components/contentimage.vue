@@ -12,7 +12,8 @@
   
 <script>
 import axios from 'axios'
-  
+import { SERVER_ADDRESS } from '../routers';
+
   export default {
     data() {
       return {
@@ -21,7 +22,7 @@ import axios from 'axios'
       }
     },
     mounted() {
-      axios.get(`http://localhost:7000/manage/locations/${this.params}/images`)
+      axios.get(`${SERVER_ADDRESS}/manage/locations/${this.params}/images`)
         .then((response) => {
           this.imagedata = response.data
           console.log(this.imagedata)

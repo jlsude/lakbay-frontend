@@ -50,6 +50,7 @@
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import Sidebar from './Sidebar.vue';
+import { SERVER_ADDRESS } from '../routers';
 
 	export default {
   		components: { Sidebar },
@@ -78,7 +79,7 @@ import Sidebar from './Sidebar.vue';
 			//Authorization
 			let userToken = Cookies.get('auth_token');
 			if (userToken) {
-				axios.get(`http://localhost:7000/home/u/userprofile`, {
+				axios.get(`${SERVER_ADDRESS}/home/u/userprofile`, {
 				headers: {
 					Authorization: `Bearer ${userToken}`
 				}
@@ -106,11 +107,12 @@ import Sidebar from './Sidebar.vue';
 			};
 
 			
-			//Recent Lakbay - focus on recent lakbay	
-			axios.get(`http://localhost:7000/home/u/userhistory`, {
+			//Recent Lakbay - focus on recent lakbay
+			this.userhistory = null	
+			axios.get(`${SERVER_ADDRESS}/home/u/userhistory`, {
 				headers: { Authorization: `Bearer ${userToken}`}})
 			.then((response) => {
-				this.userhistory = response.data.slice(-2).reverse();
+				this.userhistory = response.data.slice(-2).reverse(); //
 				console.log('Recent Lakbay data', this.userhistory);
 
 				if (this.userhistory.length < 2) {
@@ -128,7 +130,7 @@ import Sidebar from './Sidebar.vue';
 			});
 
 			//Bucketlist ----------------------------------------------
-			axios.get(`http://localhost:7000/bucketlist/allview`)
+			axios.get(`${SERVER_ADDRESS}/bucketlist/allview`)
 			.then((response) => {
 				this.BucketLists = response.data.slice(-3);
 				console.log('BucketLists', this.BucketLists);

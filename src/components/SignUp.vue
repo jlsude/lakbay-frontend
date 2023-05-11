@@ -84,7 +84,7 @@ import Cookies from 'js-cookie'
                 console.log('Signed up')
                 this.Warning = "";
                 //ip address of the http requests may need to be changes if tested from other device
-                axios.post('http://localhost:7000/loginpage/u/login/signup', this.SignUpInfo)
+                axios.post(`${SERVER_ADDRESS}/loginpage/u/login/signup`, this.SignUpInfo)
                 .then((response) => {
                     console.log(response.data.token);
                     const userToken = response.data.token;

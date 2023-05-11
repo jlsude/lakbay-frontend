@@ -32,12 +32,14 @@
 import axios from 'axios'
 import jwt_decode from 'jwt-decode'
 import Cookies from 'js-cookie'
+import { SERVER_ADDRESS } from '../routers';
 
 
 export default {
     name: 'Login',
     data() {
         return {
+
             LoginInfo: {
                 useremail: "",
                 userpassword: ""
@@ -54,14 +56,16 @@ export default {
         Cookies.remove('auth_token'); 
         this.authToken = ''
 
+        
+
     },
     methods: {
         login(){
-            
+            console.log(SERVER_ADDRESS)
             if(this.LoginInfo.useremail && this.LoginInfo.userpassword){
                 this.Warning = "",
-                //ip address of the http requests may need to be changed if tested from other device
-                axios.post(`http://localhost:7000/loginpage/u/login`, this.LoginInfo)
+                //ip address of the http requests may need to be changed if tested from other device http://localhost:7000
+                axios.post(`${SERVER_ADDRESS}/loginpage/u/login`, this.LoginInfo)
                 .then((response) => {
                     this.Warning = "Login Successful";
                     const userToken = response.data.token;

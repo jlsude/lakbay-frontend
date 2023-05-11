@@ -50,6 +50,7 @@ import Cookies from 'js-cookie';
 import axios from 'axios';
 import SidebarToHome from './SidebarToHome.vue';
 import BeginLakbayPopup from './BeginLakbayPopup.vue'
+import { SERVER_ADDRESS } from '../routers';
 
 	export default {
   		components: { SidebarToHome, BeginLakbayPopup },
@@ -76,7 +77,7 @@ import BeginLakbayPopup from './BeginLakbayPopup.vue'
 			//Authorization
 			let userToken = Cookies.get('auth_token');
 			if (userToken) {
-				axios.get(`http://localhost:7000/home/u/userprofile`, 
+				axios.get(`${SERVER_ADDRESS}/home/u/userprofile`, 
 				{ headers: { Authorization: `Bearer ${userToken}`} })
 				.then((response) => {
 					this.userProfile = response.data[0];
@@ -101,7 +102,7 @@ import BeginLakbayPopup from './BeginLakbayPopup.vue'
 
 
 			// if search input is empty launch the get ALL request, must also be in methods not just in mounted
-			axios.get('http://localhost:7000/maps/allview')
+			axios.get(`${SERVER_ADDRESS}/maps/allview`)
 			.then((response) => {
 				this.lakbaymaps = response.data
 				console.log(this.lakbaymaps)
@@ -118,7 +119,7 @@ import BeginLakbayPopup from './BeginLakbayPopup.vue'
 			},
 			searchMap(searchInput){
 				if (searchInput.length > 0){
-					axios.post('http://localhost:7000/maps/search/keywords', {keywords: this.searchInput})
+					axios.post(`${SERVER_ADDRESS}/maps/search/keywords`, {keywords: this.searchInput})
 					.then((response) => {
 						console.log(this.searchInput)
 						this.lakbaymaps = response.data
@@ -129,7 +130,7 @@ import BeginLakbayPopup from './BeginLakbayPopup.vue'
 						this.error = 'Failed to fetch maps.';
 					});
 				} else {
-					axios.get('http://localhost:7000/maps/allview')
+					axios.get(`${SERVER_ADDRESS}/maps/allview`)
 					.then((response) => {
 						this.lakbaymaps = response.data
 						console.log(this.lakbaymaps)
@@ -145,7 +146,7 @@ import BeginLakbayPopup from './BeginLakbayPopup.vue'
 				console.log(map)
 				this.focuslakbaymap = map.map_id
 				console.log(this.focuslakbaymap)
-				axios.post('http://localhost:7000/maps/get/one', { mapid : this.focuslakbaymap})
+				axios.post(`${SERVER_ADDRESS}/maps/get/one`, { mapid : this.focuslakbaymap})
 				.then((response) => {
 					this.lakbaymapchosen = response.data[0]
 					console.log(response.data[0])

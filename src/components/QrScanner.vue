@@ -1,26 +1,35 @@
 <template>
-	<div style = "display: flex; flex-direction: column; justify-content: center;">
-		<div class="logo-container">
-        	<img class="logo" src="../assets/LakbayLogo.png" alt="Lakbay Logo">
+	<div style = "display: flex; flex-direction: column; justify-content: center; background-color: #3C3C3C; position: fixed;">
+		
+		
+		
+			
+		<p style = "color: white">{{ decodedQR}}</p>
+
+		<Scanpopup v-if = "showPopup" :message = "this.landmarkinfos.landmark_name" 
+			:landmark_id = "this.landmarkinfos.landmark_id"
+			v-on:close-popup="closePopupHandler"
+		></Scanpopup>
+
+		<ScanpopupError v-if = "showPopupError"></ScanpopupError>
+
+		<div class="overlay" v-if="showPopup"></div>
+
+		<div style = "display: flex; flex-direction: column; justify-content: center; width: 110%; margin-left: -1vh;
+			margin-top: -5vh;">
+			<qrcode-stream @init="onInit" @decode="onDecode"  class="QRcode" :stream="stream"></qrcode-stream>
 		</div>
 		
-		<div class="qr-container">
-			
-			<p style = "color: white">{{ decodedQR}}</p>
-
-			<Scanpopup v-if = "showPopup" :message = "this.landmarkinfos.landmark_name" 
-				:landmark_id = "this.landmarkinfos.landmark_id"
-				v-on:close-popup="closePopupHandler"
-			></Scanpopup>
-
-			<ScanpopupError v-if = "showPopupError"></ScanpopupError>
-
-			<div class="overlay" v-if="showPopup"></div>
-
-			<qrcode-stream @init="onInit" @decode="onDecode"  class="QRcode" :stream="stream"></qrcode-stream>
+		
+		<div style = "display: flex; flex-direction: column; justify-content: center; width: 104.75%; padding-bottom: 4vh; 
+		background-color: #3C3C3C; margin-left: -1vh; overflow: hidden; padding-bottom: 50vh;">
+			<div class="logo-container">
+				<img class="logo" src="../assets/LakbayLogoDarkmode.png" alt="Lakbay Logo">
+			</div>
 			<button class = "backbutton" v-on:click = "backToHome">Back to Home</button>
-
 		</div>
+
+		
 	</div>
 </template>
 
@@ -30,6 +39,7 @@ import { QrcodeStream } from 'vue3-qrcode-reader';
 import axios from 'axios';
 import Scanpopup from './Scanpopup.vue';
 import ScanpopupError from './ScanpopupError.vue';
+import { SERVER_ADDRESS } from '../routers';
 
 
 export default {
@@ -54,7 +64,7 @@ export default {
 		//Authorization
 		let userToken = Cookies.get('auth_token');
 			if (userToken) {
-				axios.get(`http://localhost:7000/home/u/userprofile`, {
+				axios.get(`${SERVER_ADDRESS}/home/u/userprofile`, {
 				headers: {
 					Authorization: `Bearer ${userToken}`
 				}
@@ -130,7 +140,7 @@ export default {
 				console.log("Axios initializing")
 				// endpoint 1
 				
-				axios.post(`http://localhost:7000/LakbayScan/u/scanning`, {qrcodecontent: this.qrcodecontent}) 
+				axios.post(`${SERVER_ADDRESS}/LakbayScan/u/scanning`, {qrcodecontent: this.qrcodecontent}) 
 					.then((response) => {
 						this.landmarkinfos = response.data[0]
 						this.showPopup = !this.showPopup;
@@ -140,7 +150,7 @@ export default {
 
 						//endpoint 2
 						let userToken = Cookies.get('auth_token');
-						axios.post(`http://localhost:7000/home/u/adduserhistory`,
+						axios.post(`${SERVER_ADDRESS}/home/u/adduserhistory`,
 							{ landmark_id: this.landmarkinfos.landmark_id },
 							{ headers: { Authorization: `Bearer ${userToken}` } })
 						.then((response) => {
@@ -181,43 +191,63 @@ export default {
 <style scoped>
 	@media (max-width: 500px) {
 		
+	.body{
+		margin: 0;
+	}
 	.logo-container {
-		margin-top: 10vh;
+		
 		max-width: 100%;
 		text-align: center;
 	}
 	.logo {
-		margin: auto;
-		width: 70%;
+		margin-top: 3vh;
+		width: 40%;
 		filter: drop-shadow(-9px 14px 48px #000);
+	}
+	.mainqr-container{
+		display: flex;
+		flex-direction: column;
+		/* margin-top: -10vh; */
+		/* background: #3C3C3C; */
+		margin-left: -1vh;
+		padding: 10px;
+		width: 100%;
+		justify-content: center;
+		/* border-radius: 5vh; */
+		
+		/* filter: drop-shadow(0px 16px 37px #000); */
 	}
 	.qr-container{
 		display: flex;
 		flex-direction: column;
-		margin-top: 10vh;
-		background: #3C3C3C;
+		margin-top: -10vh;
+		/* background: #3C3C3C; */
+		margin-left: -2.5vh;
 		padding: 10px;
 		width: auto;
 		justify-content: center;
-		border-radius: 5vh;
+		/* border-radius: 5vh; */
 		object-fit: contain;
-		filter: drop-shadow(0px 16px 37px #000);
-	
+		/* filter: drop-shadow(0px 16px 37px #000); */
 	}
+
 	.QRcode{
+		
 		margin-top: 0px;
-		width: inherit;
-		height: 30vh;
+		margin-left: 10vh;
+		width: 100%;
+		height: inherit;
 		/* border: 1px dashed red; */
 		margin: auto;
 		object-fit: cover;
+		
 	}
 	
 	.backbutton{
 		border: none;
 		
-		margin-top: 10vh;
-		margin-bottom: 5vh;
+		margin-top: 5vh;
+		margin-bottom: 3vh;
 		
 		align-self: center;
 		width: 30vw;

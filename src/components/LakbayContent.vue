@@ -1,6 +1,6 @@
 <template> 
 	<div style = "display: flex; flex-direction: column; justify-content: center;">
-		<div class = "header-card">
+		<div class = "header-card" >
 			<header style = "margin-inline: 2.5vw; display: flex; flex-direction: column; justify-content: center; ">
 				<div class="Content-header" >
 					<div class="sidebar-container">
@@ -103,6 +103,7 @@ import SidebarToHome from './SidebarToHome.vue';
 import axios from 'axios'
 import Cookies from 'js-cookie';
 import jwtDecode from 'jwt-decode';
+import { SERVER_ADDRESS } from '../routers';
 
 export default {
 	name: 'LakbayContent',
@@ -151,7 +152,7 @@ export default {
 		let userToken = Cookies.get('auth_token');
 		this.userTokenReview = userToken;
 			if (userToken) {
-				axios.get(`http://localhost:7000/home/u/userprofile`, {
+				axios.get(`${SERVER_ADDRESS}/home/u/userprofile`, {
 				headers: {
 					Authorization: `Bearer ${userToken}`
 				}
@@ -186,7 +187,7 @@ export default {
 
 
 		// Fetch landmark images ------------------------------------------------------------------------------------
-		axios.get(`http://localhost:7000/manage/locations/${this.landmark_id}/images`)
+		axios.get(`${SERVER_ADDRESS}/manage/locations/${this.landmark_id}/images`)
         .then((response) => {
 			this.contentimagedata = response.data
 			console.log(this.contentimagedata)
@@ -211,7 +212,7 @@ export default {
 
 
 		// Fetch landmark info NOT paragraphs ------------------------------------------------------------------------------------
-		axios.post(`http://localhost:7000/LakbayScan/u/fetching`, {landmarkid: this.landmark_id})
+		axios.post(`${SERVER_ADDRESS}/LakbayScan/u/fetching`, {landmarkid: this.landmark_id})
 		.then((response) => {
 			this.landmarkinfos = response.data[0]
 			console.log('fetch landmark info')
@@ -227,7 +228,7 @@ export default {
 
 
 		// Fetch landmark ratings -----------------------------------------------------
-		axios.post(`http://localhost:7000/LakbayScan/u/fetching/ratings`, {landmarkid: this.landmark_id})
+		axios.post(`${SERVER_ADDRESS}/LakbayScan/u/fetching/ratings`, {landmarkid: this.landmark_id})
 		.then((response) => {
 			console.log("Ratings: ",response.data[0].average_rating)
 			if (response.data[0].average_rating !== null) { // updated from response.data[0].average_ratings !== null
@@ -246,7 +247,7 @@ export default {
 
 
 		// Fetch landmark paragraphs ------------------------------------------------------------------------------------
-		axios.post(`http://localhost:7000/LakbayScan/u/fetching/paragraphs`, {landmarkid: this.landmark_id})
+		axios.post(`${SERVER_ADDRESS}/LakbayScan/u/fetching/paragraphs`, {landmarkid: this.landmark_id})
 		.then((response) => {
 			this.landmarkparagraphs = response.data
 			console.log(' fetch landmark paragraphs')
@@ -266,7 +267,7 @@ export default {
 
 
 		// Checks if user has already reviewed the landmark ------------------------------------------------------------------------------------
-		axios.post(`http://localhost:7000/LakbayScan/u/reviewlocation/checking`,
+		axios.post(`${SERVER_ADDRESS}/LakbayScan/u/reviewlocation/checking`,
 			{ landmark_id: this.landmark_id },
 			{ headers: { Authorization: `Bearer ${userToken}` } })
 		.then((response) => {
@@ -307,7 +308,7 @@ export default {
 			console.log(`Text: ${this.textInput}`);
 
 			// Check if user has already reviewed the landmark
-			axios.post(`http://localhost:7000/LakbayScan/u/reviewlocation`, {
+			axios.post(`${SERVER_ADDRESS}/LakbayScan/u/reviewlocation`, {
 				landmarkid: this.landmark_id,
 				reviewrate: this.selectedButton,
 				reviewinput: this.textInput,
@@ -339,6 +340,8 @@ export default {
 	@media(max-width: 500px){
 		.header-card{
 			background: #ffffff;
+			position: fixed;
+			top: 0;
 			margin-top: -1vh;
 			width: 105%;
 			align-self: center;
@@ -347,7 +350,7 @@ export default {
 			box-shadow: 3px 17px 58px -10px rgba(0,0,0,0.4);
 			-webkit-box-shadow: 3px 17px 58px -10px rgba(0,0,0,0.4);
 			-moz-box-shadow: 3px 17px 58px -10px rgba(0,0,0,0.4);
-
+			
 		}
 		.Content-header{
 			margin-top: 1vh;
@@ -429,6 +432,7 @@ export default {
 		}
 		.ContentMain{
 			margin-inline: 4vw;
+			margin-top: 30vw;
 			
 		}
 		.body{
