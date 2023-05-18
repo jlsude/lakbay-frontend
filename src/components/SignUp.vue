@@ -55,6 +55,7 @@
 import axios from 'axios'
 import jwt_decode from 'jwt-decode'
 import Cookies from 'js-cookie'
+import { SERVER_ADDRESS } from '../routers';
 
     export default {
     name: 'SignUp',
